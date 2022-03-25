@@ -112,10 +112,6 @@ class CategoryObserver
      */
     public function deleted($entity)
     {
-        if (!config('wk-morph-category.soft_delete')) {
-            $entity->forceDelete();
-        }
-
         if ($entity->isForceDeleting()) {
             $entity->langs()->withTrashed()
                             ->forceDelete();
@@ -123,26 +119,42 @@ class CategoryObserver
                 config('wk-morph-category.onoff.morph-board')
                 && !empty(config('wk-core.class.morph-board.board'))
             ) {
-                $entity->boards()->withTrashed()->forceDelete();
+                $records = $entity->boards()->withTrashed()->get();
+                foreach ($records as $recoed) {
+                    $recoed->forceDelete();
+                }
             }
             if (
                 config('wk-morph-category.onoff.morph-comment')
                 && !empty(config('wk-core.class.morph-comment.comment'))
             ) {
-                $entity->comments()->withTrashed()->forceDelete();
+                $records = $entity->comments()->withTrashed()->get();
+                foreach ($records as $recoed) {
+                    $recoed->forceDelete();
+                }
             }
             if (
                 config('wk-morph-category.onoff.morph-image')
                 && !empty(config('wk-core.class.morph-image.image'))
             ) {
-                $entity->images()->withTrashed()->forceDelete();
+                $records = $entity->images()->withTrashed()->get();
+                foreach ($records as $recoed) {
+                    $recoed->forceDelete();
+                }
             }
             if (
                 config('wk-morph-category.onoff.morph-link')
                 && !empty(config('wk-core.class.morph-link.link'))
             ) {
-                $entity->links()->withTrashed()->forceDelete();
+                $records = $entity->links()->withTrashed()->get();
+                foreach ($records as $recoed) {
+                    $recoed->forceDelete();
+                }
             }
+        }
+
+        if (!config('wk-morph-category.soft_delete')) {
+            $entity->forceDelete();
         }
     }
 
