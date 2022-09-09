@@ -31,7 +31,6 @@ class Category extends Entity
             'url',
             'target',
             'cover',
-            'icon',
             'images',
             'order'
         ]);
